@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 
 declare global {
   interface Window {
-    jQuery: any;
+    jQuery: JQueryStatic;
   }
 }
 
@@ -27,13 +27,14 @@ const RippleEffectComponent = () => {
     const radius = 30 + Math.random() * 50; // Random radius between 20 and 30
     const strength = 0.03 + Math.random() * 0.05; // Random strength between 0.02 and 0.05
 
+    // @ts-expect-error - jquery.ripples type definitions are not available
     $(rippleRef.current).ripples("drop", x, y, radius, strength);
   };
 
   useEffect(() => {
     window.jQuery = $; // Expose jQuery globally
     if (rippleRef.current) {
-      // Initialize the ripples effect
+    // @ts-expect-error - jquery.ripples type definitions are not available
       $(rippleRef.current).ripples({
         resolution: 512,
         dropRadius: 20, // Size of ripple
@@ -47,6 +48,7 @@ const RippleEffectComponent = () => {
       return () => {
         clearInterval(interval);
         if (rippleRef.current) {
+              // @ts-expect-error - jquery.ripples type definitions are not available
           $(rippleRef.current).ripples("destroy");
         }
       };
